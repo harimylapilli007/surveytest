@@ -1104,7 +1104,7 @@
 
         try {
           // Call your backend API to process with OpenAI
-          const response = await fetch(`${config.BACKEND_API_URL}/api/analyze-survey`, {
+          const response = await fetch(`/api/analyze-survey`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
