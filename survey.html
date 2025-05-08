@@ -10,11 +10,26 @@
   <link href="css/ode-life.webflow.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Varela&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Material+Icons&family=Material+Icons+Outlined&family=Gilda+Display&family=Barlow:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
   <script type="text/javascript">
       WebFont.load({
         google: {
           families: ["Varela:400", "PT Serif:400,400italic,700,700italic", "Material Icons:regular", "Material Icons Outlined:regular", "Gilda Display:regular", "Barlow:300,regular,500,600,700,800"]
+        },
+        loading: function() {
+          // Font loading started
+          document.documentElement.classList.add('wf-loading');
+        },
+        active: function() {
+          // Font loading completed
+          document.documentElement.classList.remove('wf-loading');
+          document.documentElement.classList.add('wf-active');
+        },
+        inactive: function() {
+          // Font loading failed
+          document.documentElement.classList.remove('wf-loading');
+          document.documentElement.classList.add('wf-inactive');
         }
       });
     </script>
