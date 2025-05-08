@@ -537,7 +537,7 @@
       <div class="container">
         <div class="survey-wrapper">
           <div class="survey-title">
-            <h1>Customer Feedback Survey</h1>
+            <h1>Wellness Survey</h1>
           </div>
           <div class="progress-bar">
             <div class="progress" id="surveyProgress"></div>
@@ -995,6 +995,19 @@
         inputs.forEach(input => {
           input.addEventListener('input', updateNextButton);
           input.addEventListener('change', updateNextButton);
+          
+          // Add keydown event listener for Enter key
+          input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+              e.preventDefault(); // Prevent form submission
+              if (hasAnswer() && currentQuestion < totalQuestions - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+              } else if (currentQuestion === totalQuestions - 1 && hasAnswer()) {
+                form.dispatchEvent(new Event('submit')); // Trigger form submission on last question
+              }
+            }
+          });
         });
       });
       
