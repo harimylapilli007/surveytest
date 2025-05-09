@@ -120,11 +120,11 @@ app.post('/api/analyze-survey', async (req, res) => {
       if (questionIndex >= 0 && questionIndex < scoringQuestions.length) {
         const questionData = scoringQuestions[questionIndex];
         if (questionData) {  // Add null check
-          let answerIndex = optionMap[answer];
-          if (answerIndex !== undefined && answerIndex < questionData.options.length) {
-            totalScore += (answerIndex + 1);
-            // Replace the letter with the actual answer text for the prompt
-            surveyResponses[questionKey] = questionData.options[answerIndex];
+        let answerIndex = optionMap[answer];
+        if (answerIndex !== undefined && answerIndex < questionData.options.length) {
+          totalScore += (answerIndex + 1);
+          // Replace the letter with the actual answer text for the prompt
+          surveyResponses[questionKey] = questionData.options[answerIndex];
           }
         }
       }
@@ -133,20 +133,20 @@ app.post('/api/analyze-survey', async (req, res) => {
     const wellnessScore = Math.round((totalScore / maxScore) * 100);
 
     // Create a prompt for OpenAI
-    const prompt = `You are a wellness coach. Given the following user details and quiz responses, provide a concise summary with the user's wellness score (${wellnessScore}/100) and a personalized recommendation for spa or wellness services. Also include a greeting to user in the beginning of the response and add Ode Spa as the wellness expert in regards section.
+    const prompt = `You are a wellness coach. Given the following user details and quiz responses, provide a concise summary with the user's wellness score (${wellnessScore}/100) and a personalized recommendation for spa or wellness services. Start your response with a warm greeting using the user's name (${personalInformation.name}). Also include Ode Spa as the wellness expert in regards section.
 
-User info: age=${personalInformation.age}, email=${personalInformation.email}, phone=${personalInformation.phone}.
+User info: Name=${personalInformation.name}, age=${personalInformation.age}, email=${personalInformation.email}, phone=${personalInformation.phone}.
 
 Responses:
 ${Object.entries(surveyResponses)
   .filter(([questionKey, answer]) => {
-    const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
+  const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
     return questionIndex >= 0 && questionIndex < scoringQuestions.length;
   })
   .map(([questionKey, answer]) => {
-    const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
-    return `${scoringQuestions[questionIndex].question}\nAnswer: ${answer}`;
-  }).join('\n\n')}
+  const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
+  return `${scoringQuestions[questionIndex].question}\nAnswer: ${answer}`;
+}).join('\n\n')}
 
 Please provide a comprehensive analysis in HTML format with the following sections:
 1. Overall Wellness Assessment (including the score interpretation)
