@@ -116,13 +116,16 @@ app.post('/api/analyze-survey', async (req, res) => {
     // Map responses to scores and convert letters to text
     Object.entries(surveyResponses).forEach(([questionKey, answer]) => {
       const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
+      // Skip if question index is out of bounds or invalid
       if (questionIndex >= 0 && questionIndex < scoringQuestions.length) {
         const questionData = scoringQuestions[questionIndex];
-        let answerIndex = optionMap[answer];
-        if (answerIndex !== undefined && answerIndex < questionData.options.length) {
-          totalScore += (answerIndex + 1);
-          // Replace the letter with the actual answer text for the prompt
-          surveyResponses[questionKey] = questionData.options[answerIndex];
+        if (questionData) {  // Add null check
+          let answerIndex = optionMap[answer];
+          if (answerIndex !== undefined && answerIndex < questionData.options.length) {
+            totalScore += (answerIndex + 1);
+            // Replace the letter with the actual answer text for the prompt
+            surveyResponses[questionKey] = questionData.options[answerIndex];
+          }
         }
       }
     });
@@ -135,28 +138,15 @@ app.post('/api/analyze-survey', async (req, res) => {
 User info: age=${personalInformation.age}, email=${personalInformation.email}, phone=${personalInformation.phone}.
 
 Responses:
-${Object.entries(surveyResponses).map(([questionKey, answer]) => {
-  const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
-  return `${scoringQuestions[questionIndex].question}\nAnswer: ${answer}`;
-}).join('\n\n')}
-
-Please provide a comprehensive analysis in HTML format with the following sections:
-1. Overall Wellness Assessment (including the score interpretation)
-2. Key Strengths and Areas for Improvement
-3. Personalized Recommendations for:
-Personal Information:
-- Name: ${personalInformation.name}
-- Gender: ${personalInformation.gender}
-- Email: ${personalInformation.email}
-- Phone: ${personalInformation.phone}
-
-Wellness Score: ${wellnessScore}/100
-
-Survey Responses:
-${Object.entries(surveyResponses).map(([questionKey, answer]) => {
-  const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
-  return `${scoringQuestions[questionIndex].question}\nAnswer: ${answer}`;
-}).join('\n\n')}
+${Object.entries(surveyResponses)
+  .filter(([questionKey, answer]) => {
+    const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
+    return questionIndex >= 0 && questionIndex < scoringQuestions.length;
+  })
+  .map(([questionKey, answer]) => {
+    const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
+    return `${scoringQuestions[questionIndex].question}\nAnswer: ${answer}`;
+  }).join('\n\n')}
 
 Please provide a comprehensive analysis in HTML format with the following sections:
 1. Overall Wellness Assessment (including the score interpretation)
