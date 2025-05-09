@@ -33,13 +33,8 @@ const scoringQuestions = [
     options: ["Relaxed muscles", "A calm mind", "An uplifted mood", "Better sleep"]
   },
   {
-    question: "When you feel \"out of sync,\" which self-care ritual appeals most?",
-    options: [
-      "A warm herbal steam or shower",
-      "A gentle full-body stretch or massage",
-      "Using soothing essential oils",
-      "Listening to calming music"
-    ]
+    question: "How often would you ideally schedule a wellness session to maintain overall balance?",
+    options: ["Only when I feel run-down", "Quarterly", "Monthly", "Weekly"]
   },
   {
     question: "When stress peaks, which quick reset helps you most?",
@@ -51,30 +46,17 @@ const scoringQuestions = [
     ]
   },
   {
-    question: "To build daily resilience, which morning ritual would you adopt?",
-    options: [
-      "5-minute breathing exercise",
-      "A cold or contrast shower",
-      "Sipping a cup of herbal tea",
-      "Light stretching or yoga"
-    ]
-  },
-  {
-    question: "After a tough workout, which recovery method do you prefer?",
-    options: [
-      "Gentle stretching",
-      "Foam-roller self-massage",
-      "Cold water immersion (e.g., shower)",
-      "Heat application (e.g., heating pad)"
-    ]
-  },
-  {
-    question: "How confident are you at performing strength exercises (e.g., push-ups, weights)?",
-    options: ["Not confident", "Somewhat confident", "Confident", "Very confident"]
-  },
-  {
     question: "How would you rate your flexibility and joint mobility?",
     options: ["Very limited", "Below average", "Above average", "Excellent"]
+  },
+  {
+    question: "Which supportive practice best complements your fitness routine?",
+    options: [
+      "Foot or hand exercises",
+      "Applying gentle warmth (heat pad)",
+      "Listening to energizing music",
+      "Assisted or partner-led stretching"
+    ]
   },
   {
     question: "How long does it usually take you to fall asleep?",
@@ -85,36 +67,21 @@ const scoringQuestions = [
     options: ["Rarely", "Sometimes", "Often", "Almost always"]
   },
   {
-    question: "How often do you carve out 'me-time' without distractions?",
-    options: ["Never", "Once a week", "Several times a week", "Daily"]
-  },
-  {
-    question: "When negative thoughts arise, how do you handle them?",
-    options: ["I get overwhelmed", "I distract myself", "I observe them", "I let them pass"]
-  },
-  {
     question: "Over the past week, how steady has your mood been?",
     options: ["Very erratic", "Somewhat erratic", "Mostly steady", "Very steady"]
   },
   {
     question: "Which environment helps you recenter best?",
-    options: ["A quiet indoor space", "A softly lit room", "An outdoor/nature setting", "A bright, colorful area"]
-  },
-  {
-    question: "How comfortable are you sitting in silence without screen time?",
-    options: ["Very uncomfortable", "Somewhat uncomfortable", "Somewhat comfortable", "Very comfortable"]
+    options: [
+      "A quiet indoor space",
+      "A softly lit room",
+      "An outdoor/nature setting",
+      "A bright, colorful area"
+    ]
   },
   {
     question: "How often do you intentionally pause to check in with your feelings?",
     options: ["Never", "Once a day", "Several times a day", "Continuously as needed"]
-  },
-  {
-    question: "How often would you ideally schedule a wellness session to maintain overall balance?",
-    options: ["Only when I feel run-down", "Quarterly", "Monthly", "Weekly"]
-  },
-  {
-    question: "Which supportive practice best complements your fitness routine?",
-    options: ["Foot or hand exercises", "Applying gentle warmth (heat pad)", "Listening to energizing music", "Assisted or partner-led stretching"]
   }
 ];
 
