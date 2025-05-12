@@ -1340,7 +1340,7 @@
           document.getElementById('wellnessScore').textContent = result.wellnessScore;
           
           // Display AI analysis
-          document.getElementById('aiResponse').innerHTML = result.analysis;
+          document.getElementById('aiResponse').innerHTML = stripMarkdownCodeBlock(result.analysis);
 
         } catch (error) {
           console.error('Error:', error);
@@ -1385,6 +1385,11 @@
         // Reset form classes
         form.classList.remove('complete');
       });
+
+      // Utility to strip Markdown code block from AI response
+      function stripMarkdownCodeBlock(text) {
+        return text.replace(/^```[a-zA-Z]*\n?/, '').replace(/```$/, '').trim();
+      }
     });
   </script>
 </body>
