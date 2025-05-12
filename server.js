@@ -163,7 +163,7 @@ Format the response with appropriate HTML headings, paragraphs, and bullet point
 
     // Generate content using OpenAI
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o-mini",
       messages: [
         { role: "system", content: "You are a helpful wellness expert." },
         { role: "user", content: prompt }
