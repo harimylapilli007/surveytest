@@ -53,6 +53,11 @@
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
+      transition: max-width 0.3s ease;
+    }
+
+    .survey-wrapper.full-width {
+      max-width: 100%;
     }
 
     .progress-bar {
@@ -79,6 +84,17 @@
       position: relative;
       --corner-length: 0px;
       --corner-width: 2px;
+    }
+
+    @keyframes blinkBorder {
+      0% { border-color: transparent; }
+      50% { border-color: #b69348; }
+      100% { border-color: transparent; }
+    }
+
+    .survey-form.blink-border::before,
+    .survey-form.blink-border::after {
+      animation: blinkBorder 1.5s infinite;
     }
 
     .survey-form::before,
@@ -254,7 +270,7 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
-    .loading-spinner {
+    /* .loading-spinner {
       width: 50px;
       height: 50px;
       border: 5px solid #f3f3f3;
@@ -262,9 +278,83 @@
       border-radius: 50%;
       margin: 0 auto 20px;
       animation: spin 1s linear infinite;
+    } */
+
+    .loading-messages {
+      position: relative;
+      height: 80px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    .loading-message {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .loading-message.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .loading-emoji {
+      font-size: 32px;
+      display: inline-block;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .loading-text {
+      font-size: 18px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
     }
 
     @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Emoji-specific animations */
+    .loading-message:nth-child(1) .loading-emoji {
+      animation: balance 2s ease-in-out infinite;
+    }
+
+    .loading-message:nth-child(2) .loading-emoji {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .loading-message:nth-child(3) .loading-emoji {
+      animation: rotate 3s ease-in-out infinite;
+    }
+
+    @keyframes balance {
+      0%, 100% { transform: rotate(-10deg); }
+      50% { transform: rotate(10deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    @keyframes rotate {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
@@ -308,6 +398,7 @@
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       margin-top: 20px;
+      width: 100%;
     }
 
     .results-section h2 {
@@ -581,7 +672,7 @@
                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                     title="Please enter a valid email address (e.g., john.doe@example.com)"
                     style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px;">
-                  <div class="error-message" id="emailError" style="color: black; font-size: 14px; margin-top: 5px; display: none;"></div>
+                  <div class="error-message" id="emailError" style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; padding: 8px 12px; font-size: 14px; margin-top: 5px; display: none;"></div>
                 </div>
               </div>
 
@@ -592,7 +683,7 @@
                     pattern="[0-9]{10}"
                     title="Please enter a valid 10-digit phone number"
                     style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px;">
-                  <div class="error-message" id="phoneError" style="color: black; font-size: 14px; margin-top: 5px; display: none;"></div>
+                  <div class="error-message" id="phoneError" style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; padding: 8px 12px; font-size: 14px; margin-top: 5px; display: none;"></div>
                 </div>
               </div>
 
@@ -736,8 +827,20 @@
 
           <!-- Loading State -->
           <div id="loadingState" class="loading-state" style="display: none;">
-            <div class="loading-spinner"></div>
-            <p>Analyzing your responses...</p>
+            <div class="loading-messages">
+              <div class="loading-message active">
+                <span class="loading-emoji">⚖️</span>
+                <span class="loading-text">Balancing your wellness wheel</span>
+              </div>
+              <div class="loading-message">
+                <span class="loading-emoji">🎵</span>
+                <span class="loading-text">Tuning into your lifestyle rhythm</span>
+              </div>
+              <div class="loading-message">
+                <span class="loading-emoji">🗺️</span>
+                <span class="loading-text">Mapping your path to better well-being</span>
+              </div>
+            </div>
           </div>
 
           <!-- Results Section -->
@@ -859,6 +962,103 @@
       const submitBtn = document.getElementById('submitBtn');
       const progressBar = document.getElementById('surveyProgress');
       
+      // Add arrow key navigation
+      document.addEventListener('keydown', function(e) {
+        const activeQuestion = document.querySelector('.question.active');
+        if (!activeQuestion) return;
+
+        const radioInputs = activeQuestion.querySelectorAll('input[type="radio"]');
+        const textInputs = activeQuestion.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+        
+        // Handle Enter key for navigation
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (hasAnswer()) {
+            if (currentQuestion < totalQuestions - 1) {
+              currentQuestion++;
+              showQuestion(currentQuestion);
+            } else {
+              form.dispatchEvent(new Event('submit')); // Submit form on last question
+            }
+          }
+          return;
+        }
+
+        // Handle radio inputs navigation
+        if (radioInputs.length > 0) {
+          const currentIndex = Array.from(radioInputs).findIndex(input => input.checked);
+          
+          switch(e.key) {
+            case 'ArrowUp':
+              e.preventDefault();
+              if (currentIndex > 0) {
+                radioInputs[currentIndex - 1].checked = true;
+                updateNextButton();
+              }
+              break;
+            case 'ArrowDown':
+              e.preventDefault();
+              if (currentIndex < radioInputs.length - 1) {
+                radioInputs[currentIndex + 1].checked = true;
+                updateNextButton();
+              }
+              break;
+            case 'ArrowLeft':
+              e.preventDefault();
+              if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+              }
+              break;
+            case 'ArrowRight':
+              e.preventDefault();
+              if (currentQuestion < totalQuestions - 1 && hasAnswer()) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+              }
+              break;
+          }
+        }
+      });
+
+      // Loading message rotation
+      function rotateLoadingMessages() {
+        const messages = document.querySelectorAll('.loading-message');
+        let currentIndex = 0;
+
+        function showNextMessage() {
+          // Fade out current message with transform
+          const currentMessage = messages[currentIndex];
+          currentMessage.style.opacity = '0';
+          currentMessage.style.transform = 'translateY(20px)';
+          
+          setTimeout(() => {
+            currentMessage.classList.remove('active');
+            
+            // Move to next message
+            currentIndex = (currentIndex + 1) % messages.length;
+            const nextMessage = messages[currentIndex];
+            
+            // Fade in next message with transform
+            nextMessage.classList.add('active');
+            nextMessage.style.opacity = '1';
+            nextMessage.style.transform = 'translateY(0)';
+          }, 500); // Wait for fade out
+        }
+
+        // Initial setup
+        messages.forEach((msg, i) => {
+          msg.style.opacity = i === 0 ? '1' : '0';
+          msg.style.transform = i === 0 ? 'translateY(0)' : 'translateY(20px)';
+          msg.classList.toggle('active', i === 0);
+        });
+
+        // Rotate messages every 2.5 seconds
+        return setInterval(showNextMessage, 2500);
+      }
+
+      let messageRotationInterval;
+      
       let currentQuestion = 0;
       const totalQuestions = questions.length;
       
@@ -938,8 +1138,23 @@
         nextBtn.style.display = index === totalQuestions - 1 ? 'none' : 'block';
         submitBtn.style.display = index === totalQuestions - 1 ? 'block' : 'none';
         
+        // Add blinking border effect on last question
+        if (index === totalQuestions - 1) {
+          form.classList.add('blink-border');
+        } else {
+          form.classList.remove('blink-border');
+        }
+        
         // Update next button state
         updateNextButton();
+        
+        // Update wrapper width after 4 questions
+        const surveyWrapper = document.querySelector('.survey-wrapper');
+        if (index >= 4) {
+          surveyWrapper.classList.add('full-width');
+        } else {
+          surveyWrapper.classList.remove('full-width');
+        }
         
         updateProgress();
       }
@@ -1045,6 +1260,19 @@
           return;
         }
 
+        // Check if last question is answered
+        const lastQuestion = questions[questions.length - 1];
+        const lastQuestionInputs = lastQuestion.querySelectorAll('input[type="radio"]');
+        const isLastQuestionAnswered = Array.from(lastQuestionInputs).some(input => input.checked);
+        
+        if (!isLastQuestionAnswered) {
+          alert('Please answer the last question before submitting.');
+          // Show the last question
+          currentQuestion = questions.length - 1;
+          showQuestion(currentQuestion);
+          return;
+        }
+
         // Collect personal information
         const personalInfo = {
           name: document.getElementById('name').value,
@@ -1077,6 +1305,9 @@
         // Show loading state
         form.style.display = 'none';
         document.getElementById('loadingState').style.display = 'block';
+        
+        // Start rotating messages
+        messageRotationInterval = rotateLoadingMessages();
 
         try {
           // Call your backend API to process with OpenAI
@@ -1094,6 +1325,9 @@
 
           const result = await response.json();
 
+          // Stop rotating messages
+          clearInterval(messageRotationInterval);
+
           // Hide loading state and show results
           document.getElementById('loadingState').style.display = 'none';
           const resultsSection = document.getElementById('resultsSection');
@@ -1107,6 +1341,8 @@
 
         } catch (error) {
           console.error('Error:', error);
+          // Stop rotating messages
+          clearInterval(messageRotationInterval);
           alert('Sorry, there was an error analyzing your survey. Please try again.');
           form.style.display = 'block';
           document.getElementById('loadingState').style.display = 'none';
