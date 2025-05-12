@@ -7,9 +7,7 @@
     }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "server.js"
-    }
+    { "src": "/(css|js|images|fonts)/(.*)", "dest": "/$1/$2" },
+    { "src": "/(.*)", "dest": "server.js" }
   ]
 } 
