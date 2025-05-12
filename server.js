@@ -7,7 +7,7 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname))); // Serve static files from root directory
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from public directory
 
 // Initialize OpenAI
 const openai = new OpenAI({
