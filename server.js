@@ -17,26 +17,32 @@ const openai = new OpenAI({
 // Scoring questions for the wellness quiz
 const scoringQuestions = [
   {
+    id: "q1",
     question: "How often do you experience persistent muscle tension or stiffness?",
     options: ["Rarely", "Occasionally", "Frequently", "Constantly"]
   },
   {
+    id: "q2",
     question: "At the end of a busy day, how cluttered is your mind with stress or worries?",
     options: ["Barely", "A bit", "Quite a lot", "Overwhelmingly"]
   },
   {
+    id: "q3",
     question: "How balanced do you feel across your physical, mental, and emotional well-being?",
     options: ["Very balanced", "Somewhat balanced", "Slightly imbalanced", "Very imbalanced"]
   },
   {
+    id: "q4",
     question: "Which outcome are you craving most from a wellness session?",
     options: ["Relaxed muscles", "A calm mind", "An uplifted mood", "Better sleep"]
   },
   {
+    id: "q5",
     question: "How often would you ideally schedule a wellness session to maintain overall balance?",
     options: ["Only when I feel run-down", "Quarterly", "Monthly", "Weekly"]
   },
   {
+    id: "q6",
     question: "When stress peaks, which quick reset helps you most?",
     options: [
       "Taking a short walk",
@@ -46,10 +52,12 @@ const scoringQuestions = [
     ]
   },
   {
+    id: "q7",
     question: "How would you rate your flexibility and joint mobility?",
     options: ["Very limited", "Below average", "Above average", "Excellent"]
   },
   {
+    id: "q8",
     question: "Which supportive practice best complements your fitness routine?",
     options: [
       "Foot or hand exercises",
@@ -59,18 +67,22 @@ const scoringQuestions = [
     ]
   },
   {
+    id: "q9",
     question: "How long does it usually take you to fall asleep?",
     options: ["Over 60 minutes", "30–60 minutes", "15–30 minutes", "Under 15 minutes"]
   },
   {
+    id: "q10",
     question: "How often do you wake up feeling refreshed?",
     options: ["Rarely", "Sometimes", "Often", "Almost always"]
   },
   {
+    id: "q11",
     question: "Over the past week, how steady has your mood been?",
     options: ["Very erratic", "Somewhat erratic", "Mostly steady", "Very steady"]
   },
   {
+    id: "q12",
     question: "Which environment helps you recenter best?",
     options: [
       "A quiet indoor space",
@@ -80,6 +92,7 @@ const scoringQuestions = [
     ]
   },
   {
+    id: "q13",
     question: "How often do you intentionally pause to check in with your feelings?",
     options: ["Never", "Once a day", "Several times a day", "Continuously as needed"]
   }
@@ -113,19 +126,21 @@ app.post('/api/analyze-survey', async (req, res) => {
     // Map option letters to their index
     const optionMap = { a: 0, b: 1, c: 2, d: 3 };
 
+    // Create a map of questions by ID for easier lookup
+    const questionsById = scoringQuestions.reduce((acc, q) => {
+      acc[q.id] = q;
+      return acc;
+    }, {});
+
     // Map responses to scores and convert letters to text
-    Object.entries(surveyResponses).forEach(([questionKey, answer]) => {
-      const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
-      // Skip if question index is out of bounds or invalid
-      if (questionIndex >= 0 && questionIndex < scoringQuestions.length) {
-        const questionData = scoringQuestions[questionIndex];
-        if (questionData) {  // Add null check
+    Object.entries(surveyResponses).forEach(([questionId, answer]) => {
+      const questionData = questionsById[questionId];
+      if (questionData) {
         let answerIndex = optionMap[answer];
         if (answerIndex !== undefined && answerIndex < questionData.options.length) {
           totalScore += (answerIndex + 1);
           // Replace the letter with the actual answer text for the prompt
-          surveyResponses[questionKey] = questionData.options[answerIndex];
-          }
+          surveyResponses[questionId] = questionData.options[answerIndex];
         }
       }
     });
@@ -141,14 +156,10 @@ User info: Name=${personalInformation.name}, age=${personalInformation.age}, ema
 
 Responses:
 ${Object.entries(surveyResponses)
-  .filter(([questionKey, answer]) => {
-  const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
-    return questionIndex >= 0 && questionIndex < scoringQuestions.length;
-  })
-  .map(([questionKey, answer]) => {
-  const questionIndex = parseInt(questionKey.replace('q', '')) - 1;
-  return `${scoringQuestions[questionIndex].question}\nAnswer: ${answer}`;
-}).join('\n\n')}
+  .filter(([questionId, answer]) => questionsById[questionId])
+  .map(([questionId, answer]) => {
+    return `${questionsById[questionId].question}\nAnswer: ${answer}`;
+  }).join('\n\n')}
 
 Please provide a comprehensive analysis in HTML format with the following sections:
 1. Overall Wellness Assessment (including the score interpretation)
