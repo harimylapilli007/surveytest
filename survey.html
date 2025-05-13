@@ -1247,7 +1247,16 @@
       questions.forEach(question => {
         const inputs = question.querySelectorAll('input');
         inputs.forEach(input => {
-          input.addEventListener('input', updateNextButton);
+          input.addEventListener('input', function() {
+            updateNextButton();
+            // Auto-navigate to next question if current question is answered
+            if (hasAnswer() && currentQuestion < totalQuestions - 1) {
+              setTimeout(() => {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+              }, 300); // Small delay for better UX
+            }
+          });
           input.addEventListener('change', updateNextButton);
           
           // Add keydown event listener for Enter key
