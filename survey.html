@@ -176,6 +176,33 @@
       margin-right: 10px;
     }
 
+    .options input[type="text"],
+    .options input[type="email"],
+    .options input[type="tel"] {
+      width: 100%;
+      padding: 12px 0;
+      border: none;
+      border-bottom: 2px solid #ddd;
+      border-radius: 0;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+      background: transparent;
+    }
+
+    .options input[type="text"]:focus,
+    .options input[type="email"]:focus,
+    .options input[type="tel"]:focus {
+      outline: none;
+      border-bottom-color: #b69348;
+    }
+
+    .options input[type="text"]::placeholder,
+    .options input[type="email"]::placeholder,
+    .options input[type="tel"]::placeholder {
+      color: #999;
+      font-style: italic;
+    }
+
     .survey-buttons {
       display: flex;
       justify-content: space-between;
@@ -653,45 +680,47 @@
           </div>
           <form id="surveyForm" class="survey-form">
             <div class="question-container">
-              <div class="question active">
-                <h3>1. Please enter your full name</h3>
+              <!-- Personal Info Questions -->
+              <div class="question personal-info" data-type="personal">
+                <h3>Please enter your full name</h3>
                 <div class="options">
-                  <input type="text" id="name" name="name" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px;">
+                  <input type="text" id="name" name="name" required placeholder="Enter your full name">
                 </div>
               </div>
 
-              <div class="question">
-                <h3>2. Please select your gender</h3>
+              <div class="question personal-info" data-type="personal">
+                <h3>Please select your gender</h3>
                 <div class="options">
                   <label><input type="radio" name="gender" value="male" required> Male</label>
                   <label><input type="radio" name="gender" value="female" required> Female</label>
                 </div>
               </div>
 
-              <div class="question">
-                <h3>3. Please enter your email address</h3>
+              <div class="question personal-info" data-type="personal">
+                <h3>Please enter your email address</h3>
                 <div class="options">
                   <input type="email" id="email" name="email" required 
                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                     title="Please enter a valid email address (e.g., john.doe@example.com)"
-                    style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px;">
+                    placeholder="Enter your email address">
                   <div class="error-message" id="emailError" style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; padding: 8px 12px; font-size: 14px; margin-top: 5px; display: none;"></div>
                 </div>
               </div>
 
-              <div class="question">
-                <h3>4. Please enter your phone number</h3>
+              <div class="question personal-info" data-type="personal">
+                <h3>Please enter your phone number</h3>
                 <div class="options">
                   <input type="tel" id="phone" name="phone" required 
                     pattern="[0-9]{10}"
                     title="Please enter a valid 10-digit phone number"
-                    style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px;">
+                    placeholder="Enter your 10-digit phone number">
                   <div class="error-message" id="phoneError" style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; padding: 8px 12px; font-size: 14px; margin-top: 5px; display: none;"></div>
                 </div>
               </div>
 
-              <div class="question">
-                <h3>5. How often do you experience persistent muscle tension or stiffness?</h3>
+              <!-- Quiz Questions -->
+              <div class="question quiz-question" data-type="quiz">
+                <h3>How often do you experience persistent muscle tension or stiffness?</h3>
                 <div class="options">
                   <label><input type="radio" name="q1" value="a"> Rarely</label>
                   <label><input type="radio" name="q1" value="b"> Occasionally</label>
@@ -700,8 +729,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>6. At the end of a busy day, how cluttered is your mind with stress or worries?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>At the end of a busy day, how cluttered is your mind with stress or worries?</h3>
                 <div class="options">
                   <label><input type="radio" name="q2" value="a"> Barely</label>
                   <label><input type="radio" name="q2" value="b"> A bit</label>
@@ -710,8 +739,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>7. How balanced do you feel across your physical, mental, and emotional well-being?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>How balanced do you feel across your physical, mental, and emotional well-being?</h3>
                 <div class="options">
                   <label><input type="radio" name="q3" value="a"> Very balanced</label>
                   <label><input type="radio" name="q3" value="b"> Somewhat balanced</label>
@@ -720,8 +749,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>8. Which outcome are you craving most from a wellness session?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>Which outcome are you craving most from a wellness session?</h3>
                 <div class="options">
                   <label><input type="radio" name="q4" value="a"> Relaxed muscles</label>
                   <label><input type="radio" name="q4" value="b"> A calm mind</label>
@@ -730,8 +759,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>9. How often would you ideally schedule a wellness session to maintain overall balance?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>How often would you ideally schedule a wellness session to maintain overall balance?</h3>
                 <div class="options">
                   <label><input type="radio" name="q5" value="a"> Only when I feel run-down</label>
                   <label><input type="radio" name="q5" value="b"> Quarterly</label>
@@ -740,8 +769,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>10. When stress peaks, which quick reset helps you most?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>When stress peaks, which quick reset helps you most?</h3>
                 <div class="options">
                   <label><input type="radio" name="q6" value="a"> Taking a short walk</label>
                   <label><input type="radio" name="q6" value="b"> Spending time in a quiet space</label>
@@ -750,8 +779,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>11. How would you rate your flexibility and joint mobility?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>How would you rate your flexibility and joint mobility?</h3>
                 <div class="options">
                   <label><input type="radio" name="q7" value="a"> Very limited</label>
                   <label><input type="radio" name="q7" value="b"> Below average</label>
@@ -760,8 +789,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>12. Which supportive practice best complements your fitness routine?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>Which supportive practice best complements your fitness routine?</h3>
                 <div class="options">
                   <label><input type="radio" name="q8" value="a"> Foot or hand exercises</label>
                   <label><input type="radio" name="q8" value="b"> Applying gentle warmth (heat pad)</label>
@@ -770,8 +799,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>13. How long does it usually take you to fall asleep?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>How long does it usually take you to fall asleep?</h3>
                 <div class="options">
                   <label><input type="radio" name="q9" value="a"> Over 60 minutes</label>
                   <label><input type="radio" name="q9" value="b"> 30–60 minutes</label>
@@ -780,8 +809,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>14. How often do you wake up feeling refreshed?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>How often do you wake up feeling refreshed?</h3>
                 <div class="options">
                   <label><input type="radio" name="q10" value="a"> Rarely</label>
                   <label><input type="radio" name="q10" value="b"> Sometimes</label>
@@ -790,8 +819,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>15. Over the past week, how steady has your mood been?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>Over the past week, how steady has your mood been?</h3>
                 <div class="options">
                   <label><input type="radio" name="q11" value="a"> Very erratic</label>
                   <label><input type="radio" name="q11" value="b"> Somewhat erratic</label>
@@ -800,8 +829,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>16. Which environment helps you recenter best?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>Which environment helps you recenter best?</h3>
                 <div class="options">
                   <label><input type="radio" name="q12" value="a"> A quiet indoor space</label>
                   <label><input type="radio" name="q12" value="b"> A softly lit room</label>
@@ -810,8 +839,8 @@
                 </div>
               </div>
 
-              <div class="question">
-                <h3>17. How often do you intentionally pause to check in with your feelings?</h3>
+              <div class="question quiz-question" data-type="quiz">
+                <h3>How often do you intentionally pause to check in with your feelings?</h3>
                 <div class="options">
                   <label><input type="radio" name="q13" value="a"> Never</label>
                   <label><input type="radio" name="q13" value="b"> Once a day</label>
@@ -820,11 +849,12 @@
                 </div>
               </div>
 
-              <div class="survey-buttons">
-                <button type="button" id="prevBtn" class="survey-button">Previous</button>
-                <button type="button" id="nextBtn" class="survey-button">Next</button>
-                <button type="submit" id="submitBtn" class="survey-button">Submit</button>
-              </div>
+             
+            </div>
+            <div class="survey-buttons">
+              <button type="button" id="prevBtn" class="survey-button">Previous</button>
+              <button type="button" id="nextBtn" class="survey-button">Next</button>
+              <button type="submit" id="submitBtn" class="survey-button">Submit</button>
             </div>
           </form>
 
@@ -959,12 +989,70 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const form = document.getElementById('surveyForm');
-      const questions = document.querySelectorAll('.question');
+      let questions = document.querySelectorAll('.question');
       const prevBtn = document.getElementById('prevBtn');
       const nextBtn = document.getElementById('nextBtn');
       const submitBtn = document.getElementById('submitBtn');
       const progressBar = document.getElementById('surveyProgress');
       
+      let currentQuestion = 0;
+      
+      // Separate personal info and quiz questions
+      const personalQuestions = Array.from(document.querySelectorAll('.question.personal-info'));
+      const quizQuestions = Array.from(document.querySelectorAll('.question.quiz-question'));
+      
+      // Function to shuffle array
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+      
+      // Function to distribute personal questions among quiz questions
+      function distributeQuestions() {
+        const container = document.querySelector('.question-container');
+        container.innerHTML = ''; // Clear container
+        
+        // Shuffle personal questions
+        const shuffledPersonal = shuffleArray([...personalQuestions]);
+        
+        // Calculate positions for personal questions
+        const positions = [];
+        const totalQuestions = quizQuestions.length;
+        const personalCount = shuffledPersonal.length;
+        
+        // Generate random positions for personal questions
+        while (positions.length < personalCount) {
+          const pos = Math.floor(Math.random() * totalQuestions);
+          if (!positions.includes(pos)) {
+            positions.push(pos);
+          }
+        }
+        positions.sort((a, b) => a - b);
+        
+        // Insert questions in the correct order
+        let personalIndex = 0;
+        let quizIndex = 0;
+        
+        for (let i = 0; i < totalQuestions + personalCount; i++) {
+          if (positions.includes(i)) {
+            container.appendChild(shuffledPersonal[personalIndex]);
+            personalIndex++;
+          } else {
+            container.appendChild(quizQuestions[quizIndex]);
+            quizIndex++;
+          }
+        }
+        
+        // Update questions NodeList after reordering
+        questions = document.querySelectorAll('.question');
+      }
+      
+      // Call distributeQuestions on page load
+      distributeQuestions();
+
       // Add arrow key navigation
       document.addEventListener('keydown', function(e) {
         const activeQuestion = document.querySelector('.question.active');
@@ -1062,35 +1150,7 @@
 
       let messageRotationInterval;
       
-      let currentQuestion = 0;
       const totalQuestions = questions.length;
-      
-      // Show first question
-      showQuestion(currentQuestion);
-      
-      // Update progress bar
-      function updateProgress() {
-        const progress = ((currentQuestion + 1) / totalQuestions) * 100;
-        progressBar.style.width = progress + '%';
-        
-        // Calculate corner border lengths based on progress
-        const formWidth = form.offsetWidth;
-        const formHeight = form.offsetHeight;
-        const cornerLength = Math.min(formWidth, formHeight) * (progress / 100);
-        
-        // Update corner borders
-        const beforeCorner = form.querySelector('::before');
-        const afterCorner = form.querySelector('::after');
-        
-        form.style.setProperty('--corner-length', `${cornerLength}px`);
-        
-        // Add complete class when progress is 100%
-        if (progress === 100) {
-          form.classList.add('complete');
-        } else {
-          form.classList.remove('complete');
-        }
-      }
       
       // Check if current question has an answer
       function hasAnswer() {
@@ -1126,23 +1186,24 @@
           nextBtn.style.cursor = 'pointer';
         }
       }
-      
+
       // Show specific question
       function showQuestion(index) {
-        questions.forEach((question, i) => {
+        // Hide all questions first
+        questions.forEach(question => {
           question.classList.remove('active');
-          if (i === index) {
-            question.classList.add('active');
-          }
         });
+        
+        // Show the current question
+        questions[index].classList.add('active');
         
         // Update button visibility
         prevBtn.style.display = index === 0 ? 'none' : 'block';
-        nextBtn.style.display = index === totalQuestions - 1 ? 'none' : 'block';
-        submitBtn.style.display = index === totalQuestions - 1 ? 'block' : 'none';
+        nextBtn.style.display = index === questions.length - 1 ? 'none' : 'block';
+        submitBtn.style.display = index === questions.length - 1 ? 'block' : 'none';
         
         // Add blinking border effect on last question
-        if (index === totalQuestions - 1) {
+        if (index === questions.length - 1) {
           form.classList.add('blink-border');
         } else {
           form.classList.remove('blink-border');
@@ -1151,15 +1212,35 @@
         // Update next button state
         updateNextButton();
         
-        // Update wrapper width after 4 questions
+        // Update wrapper width based on question type
         const surveyWrapper = document.querySelector('.survey-wrapper');
-        if (index >= 4) {
-          surveyWrapper.classList.add('full-width');
-        } else {
+        const currentQuestionType = questions[index].getAttribute('data-type');
+        
+        if (currentQuestionType === 'personal') {
+          surveyWrapper.style.maxWidth = '800px';
           surveyWrapper.classList.remove('full-width');
+        } else {
+          surveyWrapper.style.maxWidth = '100%';
+          surveyWrapper.classList.add('full-width');
         }
         
-        updateProgress();
+        // Update progress bar
+        const progress = ((index + 1) / questions.length) * 100;
+        progressBar.style.width = progress + '%';
+        
+        // Calculate corner border lengths based on progress
+        const formWidth = form.offsetWidth;
+        const formHeight = form.offsetHeight;
+        const cornerLength = Math.min(formWidth, formHeight) * (progress / 100);
+        
+        form.style.setProperty('--corner-length', `${cornerLength}px`);
+        
+        // Add complete class when progress is 100%
+        if (progress === 100) {
+          form.classList.add('complete');
+        } else {
+          form.classList.remove('complete');
+        }
       }
       
       // Add event listeners to all inputs
@@ -1390,6 +1471,10 @@
       function stripMarkdownCodeBlock(text) {
         return text.replace(/^```[a-zA-Z]*\n?/, '').replace(/```$/, '').trim();
       }
+
+      // Initialize the survey
+      distributeQuestions();
+      showQuestion(0);
     });
   </script>
 </body>
