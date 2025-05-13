@@ -42,6 +42,7 @@
     </script>
   <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
   <link href="images/webclip.png" rel="apple-touch-icon">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     .survey-title{
       font-size: 14px;
@@ -429,6 +430,7 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       margin-top: 20px;
       width: 100%;
+      position: relative;
     }
 
     .results-section h2 {
@@ -474,6 +476,38 @@
     #restartSurvey:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(182, 147, 72, 0.4);
+    }
+
+    /* Add download button styles */
+    .download-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #b69348;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(182, 147, 72, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .download-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(182, 147, 72, 0.4);
+    }
+
+    .download-button:active {
+      transform: translateY(1px);
+    }
+
+    .download-button i {
+      font-size: 24px;
     }
   </style>
 </head>
@@ -878,6 +912,9 @@
 
           <!-- Results Section -->
           <div id="resultsSection" class="results-section" style="display: none;">
+            <button id="downloadPDF" class="download-button">
+              <i class="material-icons">download</i>
+            </button>
             <h2>Your Wellness Analysis</h2>
             <div class="wellness-score-container">
               <div class="score-circle">
@@ -1249,12 +1286,12 @@
         inputs.forEach(input => {
           input.addEventListener('input', function() {
             updateNextButton();
-            // Auto-navigate to next question if current question is answered
-            if (hasAnswer() && currentQuestion < totalQuestions - 1) {
+            // Auto-navigate only for radio buttons
+            if (input.type === 'radio' && hasAnswer() && currentQuestion < totalQuestions - 1) {
               setTimeout(() => {
                 currentQuestion++;
                 showQuestion(currentQuestion);
-              }, 300); // Small delay for better UX
+              }, 300);
             }
           });
           input.addEventListener('change', updateNextButton);
@@ -1484,6 +1521,30 @@
       // Initialize the survey
       distributeQuestions();
       showQuestion(0);
+
+      // Add PDF download functionality
+      document.getElementById('downloadPDF').addEventListener('click', function() {
+        const resultsSection = document.getElementById('resultsSection');
+        const downloadButton = document.getElementById('downloadPDF');
+        
+        // Hide the download button temporarily
+        downloadButton.style.display = 'none';
+        
+        // Configure PDF options
+        const opt = {
+          margin: 1,
+          filename: 'wellness-survey-results.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        // Generate PDF
+        html2pdf().set(opt).from(resultsSection).save().then(() => {
+          // Show the download button again
+          downloadButton.style.display = 'flex';
+        });
+      });
     });
   </script>
 </body>

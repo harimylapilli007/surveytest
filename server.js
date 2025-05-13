@@ -135,6 +135,8 @@ app.post('/api/analyze-survey', async (req, res) => {
     // Create a prompt for OpenAI
     const prompt = `You are a wellness coach. Given the following user details and quiz responses, provide a concise summary with the user's wellness score (${wellnessScore}/100) and a personalized recommendation for spa or wellness services. Start your response with a warm greeting using the user's name (${personalInformation.name}). Also include Ode Spa as the wellness expert in regards section.
 
+IMPORTANT: Do not include any contact information, email addresses, or phone numbers in your response.
+
 User info: Name=${personalInformation.name}, age=${personalInformation.age}, email=${personalInformation.email}, phone=${personalInformation.phone}.
 
 Responses:
@@ -165,7 +167,7 @@ Format the response with appropriate HTML headings, paragraphs, and bullet point
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: "You are a helpful wellness expert." },
+        { role: "system", content: "You are a helpful wellness expert. Do not include any contact information, email addresses, or phone numbers in your responses." },
         { role: "user", content: prompt }
       ],
       max_tokens: 1000,
